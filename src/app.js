@@ -19,8 +19,6 @@ const notificationRoutes = require("./routes/notificationRoutes");
 
 app.use("/api/notifications", notificationRoutes);
 
-
-
 // app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req, res) => {
