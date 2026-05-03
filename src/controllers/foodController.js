@@ -42,7 +42,7 @@ exports.addFood = async (req, res) => {
       isAnonymous: isAnonymous === "true" || isAnonymous === true,
       pickupFrom: pickupFrom || "",
       pickupTo: pickupTo || "",
-      image: req.file.filename,
+      image: req.file.path,
       createdBy: req.user.id,
       isClaimed: false,
     });
@@ -181,23 +181,20 @@ exports.cancelClaim = async (req, res) => {
  */
 exports.getMyProducts = async (req, res) => {
   try {
-
     const foods = await Food.find({
-      createdBy: req.user.id  
+      createdBy: req.user.id,
     })
       .populate("claimedBy", "name")
       .sort({ createdAt: -1 });
 
     res.json(foods);
-
   } catch (error) {
     console.error("MY PRODUCTS ERROR:", error);
     res.status(500).json({
-      message: "Failed to load your products"
+      message: "Failed to load your products",
     });
   }
 };
-
 
 exports.getMyProducts = async (req, res) => {
   try {
@@ -213,7 +210,7 @@ exports.getMyProducts = async (req, res) => {
 
     const foodsWithClaims = foods.map((food) => {
       const relatedClaim = claims.find(
-        (c) => c.food.toString() === food._id.toString()
+        (c) => c.food.toString() === food._id.toString(),
       );
 
       return {
