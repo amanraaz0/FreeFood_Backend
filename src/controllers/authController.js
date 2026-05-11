@@ -63,10 +63,7 @@ exports.resetPassword = async (req, res) => {
     for (let email in otpStore) {
       const data = otpStore[email];
 
-      if (
-        String(data.otp) === String(otp) &&
-        data.expires > Date.now()
-      ) {
+      if (String(data.otp) === String(otp) && data.expires > Date.now()) {
         validEmail = email;
         break;
       }
@@ -80,7 +77,7 @@ exports.resetPassword = async (req, res) => {
 
     await User.findOneAndUpdate(
       { email: validEmail },
-      { password: hashedPassword }
+      { password: hashedPassword },
     );
 
     delete otpStore[validEmail];
@@ -92,14 +89,10 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
-
-
-
 // ================== SIGNUP ==================
 exports.signup = async (req, res) => {
   try {
     const { name, email, password, location, role } = req.body;
-
 
     if (!name || !email || !password || !location) {
       return res.status(400).json({ message: "All fields are required" });
@@ -154,15 +147,14 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-   const token = jwt.sign(
-  { 
-    id: user._id,
-    role: user.role   
-  },
-  process.env.JWT_SECRET,
-  { expiresIn: "7d" }
-);
-
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" },
+    );
 
     res.json({
       message: "Login successful",
@@ -173,7 +165,6 @@ exports.login = async (req, res) => {
         email: user.email,
         location: user.location,
         role: user.role,
-
       },
     });
   } catch (error) {
