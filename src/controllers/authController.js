@@ -5,27 +5,11 @@ dns.setDefaultResultOrder("ipv4first");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
+const axios = require("axios");
 
 let otpStore = {};
 
 // 📩 Email setup
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-
-  family: 4,
-
-  connectionTimeout: 30000,
-  greetingTimeout: 30000,
-  socketTimeout: 30000,
-});
 
 // ================= SEND OTP =================
 exports.sendOTP = async (req, res) => {
@@ -48,13 +32,32 @@ exports.sendOTP = async (req, res) => {
       otp,
       expires: Date.now() + 5 * 60 * 1000, // 5 min
     };
+    await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: {
+          name: "FreeFood",
+          email: "freefoodconnect@gmail.com",
+        },
 
-    await transporter.sendMail({
-      from: `"FreeFood" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Reset Password OTP",
-      text: `Your OTP is ${otp}`,
-    });
+        to: [
+          {
+            email: email,
+          },
+        ],
+
+        subject: "Reset Password OTP",
+
+        textContent: `Your OTP is ${otp}`,
+      },
+      {
+        headers: {
+          accept: "application/json",
+          "api-key": process.env.BREVO_API_KEY,
+          "content-type": "application/json",
+        },
+      },
+    );
 
     console.log("OTP:", otp);
 
