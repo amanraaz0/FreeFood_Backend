@@ -52,8 +52,12 @@ exports.sendOTP = async (req, res) => {
 
     res.send("OTP sent to email");
   } catch (err) {
-    console.log(err);
-    res.status(500).send("Server error");
+    console.log("MAIL ERROR:", err);
+
+    res.status(500).json({
+      message: "Mail failed",
+      error: err.message,
+    });
   }
 };
 
