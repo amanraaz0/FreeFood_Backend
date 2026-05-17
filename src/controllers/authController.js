@@ -7,11 +7,24 @@ let otpStore = {};
 
 // 📩 Email setup
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+
   auth: {
-  user: process.env.EMAIL_USER,
-  pass: process.env.EMAIL_PASS,
-},
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+
+  tls: {
+    rejectUnauthorized: false,
+  },
+
+  family: 4,
+
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  socketTimeout: 20000,
 });
 
 // ================= SEND OTP =================
@@ -37,7 +50,7 @@ exports.sendOTP = async (req, res) => {
     };
 
     await transporter.sendMail({
-      from: `"FreeFood" <${process.env.BREVO_EMAIL}>`,
+      from: `"FreeFood" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Reset Password OTP",
       text: `Your OTP is ${otp}`,
