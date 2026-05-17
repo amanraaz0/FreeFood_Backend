@@ -63,11 +63,11 @@ exports.sendOTP = async (req, res) => {
 
     res.send("OTP sent to email");
   } catch (err) {
-    console.log("FULL ERROR:", err);
+    console.log("BREVO ERROR:", err.response?.data || err);
 
     res.status(500).json({
       message: err.message,
-      code: err.code,
+      data: err.response?.data,
     });
   }
 };
