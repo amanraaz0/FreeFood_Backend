@@ -13,10 +13,16 @@ const transporter = nodemailer.createTransport({
   host: "smtp-relay.brevo.com",
   port: 587,
   secure: false,
+  requireTLS: true,
+
   auth: {
     user: process.env.BREVO_EMAIL,
     pass: process.env.BREVO_PASS,
   },
+
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
 });
 
 // ================= SEND OTP =================
@@ -54,13 +60,13 @@ exports.sendOTP = async (req, res) => {
 
     res.send("OTP sent to email");
   } catch (err) {
-  console.log("FULL ERROR:", err);
+    console.log("FULL ERROR:", err);
 
-  res.status(500).json({
-    message: err.message,
-    stack: err.stack,
-  });
-}
+    res.status(500).json({
+      message: err.message,
+      stack: err.stack,
+    });
+  }
 };
 
 // ================= RESET PASSWORD =================
