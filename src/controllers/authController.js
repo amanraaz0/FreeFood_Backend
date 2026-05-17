@@ -40,6 +40,7 @@ exports.sendOTP = async (req, res) => {
       otp,
       expires: Date.now() + 5 * 60 * 1000, // 5 min
     };
+    console.log("Sending mail...");
 
     await transporter.sendMail({
       from: `"FreeFood" <${process.env.BREVO_EMAIL}>`,
@@ -47,18 +48,19 @@ exports.sendOTP = async (req, res) => {
       subject: "Reset Password OTP",
       text: `Your OTP is ${otp}`,
     });
+    console.log("Mail sent successfully");
 
     console.log("OTP:", otp);
 
     res.send("OTP sent to email");
   } catch (err) {
-    console.log("MAIL ERROR:", err);
+  console.log("FULL ERROR:", err);
 
-    res.status(500).json({
-      message: "Mail failed",
-      error: err.message,
-    });
-  }
+  res.status(500).json({
+    message: err.message,
+    stack: err.stack,
+  });
+}
 };
 
 // ================= RESET PASSWORD =================
