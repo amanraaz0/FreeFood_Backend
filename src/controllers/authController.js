@@ -8,23 +8,19 @@ let otpStore = {};
 // 📩 Email setup
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  port: 465,
+  secure: true,
 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 
-  tls: {
-    rejectUnauthorized: false,
-  },
-
   family: 4,
 
-  connectionTimeout: 20000,
-  greetingTimeout: 20000,
-  socketTimeout: 20000,
+  connectionTimeout: 30000,
+  greetingTimeout: 30000,
+  socketTimeout: 30000,
 });
 
 // ================= SEND OTP =================
@@ -60,8 +56,12 @@ exports.sendOTP = async (req, res) => {
 
     res.send("OTP sent to email");
   } catch (err) {
-    console.log(err);
-    res.status(500).send("Server error");
+    console.log("FULL ERROR:", err);
+
+    res.status(500).json({
+      message: err.message,
+      code: err.code,
+    });
   }
 };
 
