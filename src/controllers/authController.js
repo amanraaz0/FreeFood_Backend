@@ -3,6 +3,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
+console.log("EMAIL:", process.env.BREVO_EMAIL);
+console.log("PASS:", process.env.BREVO_PASS);
+
 let otpStore = {};
 
 // 📩 Email setup
