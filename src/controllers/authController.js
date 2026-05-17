@@ -46,9 +46,48 @@ exports.sendOTP = async (req, res) => {
           },
         ],
 
-        subject: "Reset Password OTP",
+        subject: "FreeFood Password Reset OTP",
 
-        textContent: `Your OTP is ${otp}`,
+        htmlContent: `
+<div style="font-family: Arial, sans-serif; background:#f4f4f4; padding:40px;">
+  <div style="max-width:500px; margin:auto; background:white; border-radius:10px; padding:30px; text-align:center; box-shadow:0 0 10px rgba(0,0,0,0.1);">
+
+    <h1 style="color:#22c55e;">FreeFood</h1>
+
+    <h2 style="color:#333;">Password Reset OTP</h2>
+
+    <p style="font-size:16px; color:#555;">
+      Use the OTP below to reset your password.
+    </p>
+
+    <div style="margin:30px 0;">
+      <span style="
+        display:inline-block;
+        background:#22c55e;
+        color:white;
+        font-size:32px;
+        letter-spacing:5px;
+        padding:15px 30px;
+        border-radius:8px;
+        font-weight:bold;
+      ">
+        ${otp}
+      </span>
+    </div>
+
+    <p style="color:#777; font-size:14px;">
+      This OTP is valid for 5 minutes.
+    </p>
+
+    <hr style="margin:30px 0;" />
+
+    <p style="font-size:13px; color:#999;">
+      If you did not request this, please ignore this email.
+    </p>
+
+  </div>
+</div>
+`,
       },
       {
         headers: {
