@@ -7,10 +7,12 @@ let otpStore = {};
 
 // 📩 Email setup
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: "freefoodconnect@gmail.com",
-    pass: "ujlg uxkj eyso auep",
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
