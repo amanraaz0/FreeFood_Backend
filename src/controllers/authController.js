@@ -7,12 +7,12 @@ let otpStore = {};
 
 // 📩 Email setup
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp-relay.brevo.com",
   port: 587,
   secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.BREVO_EMAIL,
+    pass: process.env.BREVO_PASS,
   },
 });
 
@@ -39,7 +39,7 @@ exports.sendOTP = async (req, res) => {
     };
 
     await transporter.sendMail({
-      from: "freefoodconnect@gmail.com",
+      from: `"FreeFood" <${process.env.BREVO_EMAIL}>`,
       to: email,
       subject: "Reset Password OTP",
       text: `Your OTP is ${otp}`,
